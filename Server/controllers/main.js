@@ -193,22 +193,44 @@ module.exports.new_talent = function(req,res){
   res.render('newTalent.hbs', {currentYear: new Date().getFullYear()});
 }
 
-module.exports.get_deletetalent = function(req, res)
-{
+module.exports.update_talent = function(req, res) {
     var db = req.db;
-    var fname = req.params.fname;
+    var lname = req.params.lname;
 
     var collection = db.get('talent');
 
-    collection.find({fname: fname},
+    collection.find({lname: lname},
+        function(err, docs)
+        {
+            res.render('updateTalent.hbs', {
+                pageTitle: "Update Talent:",
+                lname: lname,
+                talent: docs[0],
+                currentYear: new Date().getFullYear()
+            });
+
+        });
+}
+
+module.exports.get_deletetalent = function(req, res)
+{
+    var db = req.db;
+    var lname = req.params.lname;
+
+    var collection = db.get('talent');
+
+
+
+    collection.find({lname: lname},
         function(err, docs)
         {
             res.render('deleteTalent.hbs', {
-                pageTitle: 'Talent to delete:' + fname,
-                fname: fname,
+                pageTitle: 'Talent to delete:' + lname,
+                lname: lname,
                 talent: docs,
                 currentYear: new Date().getFullYear()
             })
 
         });
 };
+
