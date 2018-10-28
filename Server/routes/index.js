@@ -28,6 +28,7 @@ router.get('/home', cntrMain.home);
 
 /* Routes associated with Talent */
 router.get('/talent', modelMain.get_talent);
+router.get('/talent/:lname', modelMain.get_searchtalent);
 router.get('/addTalent', cntrMain.new_talent);
 router.post('/addTalent', modelMain.add_talent);
 router.get('/deleteTalent/:lname', cntrMain.get_deletetalent);
