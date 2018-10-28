@@ -55,15 +55,15 @@ module.exports.add_talent = function(req, res)
 module.exports.get_searchtalent = function(req, res)
 {
     var db = req.db;
-    var fname = req.params.fname;
+    var lname = req.params.lname;
 
     var collection = db.get('talent');
 
-    collection.find({fname: fname},
+    collection.find({lname: lname},
         function(err, docs)
         {
             res.render('displayTalent.hbs', {
-                pageTitle: 'Talent:' + fname,
+                pageTitle: 'Talent:' + lname,
                 talent: docs,
                 currentYear: new Date().getFullYear()
             })
@@ -76,18 +76,47 @@ module.exports.get_searchtalent = function(req, res)
  */
 module.exports.post_deletetalent = function(req, res)
 {
-    var fname = req.params.fname;
+    var lname = req.params.lname;
     var db = req.db;
     var collection = db.get('talent');
 
-    collection.remove( { "fname" : fname },
+    console.log("Lname is" + lname);
+    collection.remove( { "lname" : lname },
         function (err, doc)
         {
             if (err) {
                 res.send("Delete failed.");
             }
             else {
-                res.send("Successfully deleted " + fname);
+                res.send("Successfully deleted " + lname);
+            }
+        });
+};
+
+/*
+ * POST Update user page.
+ */
+module.exports.post_update_talent = function(req, res)
+{
+    var db = req.db;
+    var collection = db.get('talent');
+
+    var oldLname = req.params.lname;
+    var fname = req.body.fname;
+    var mname = req.body.mname;
+    var lname = req.body.lname;
+    var phone = req.body.phone;
+    var email = req.body.email;
+    var jobs = req.body.jobs;
+
+    collection.findOneAndUpdate( { "lname" : oldLname }, { $set: { lname: lname, mname: mname, fname: fname, phone: phone, email: email, jobs: jobs}},
+        function (err, doc)
+        {
+            if (err) {
+                res.send("Update failed.");
+            }
+            else {
+                res.send("Successfully updated record with Last Name:" + lname);
             }
         });
 };
@@ -98,22 +127,22 @@ module.exports.post_deletetalent = function(req, res)
 
 module.exports.get_addRecords = function(req, res){
 
-	var jsonData = require('../MOCK_DATA.json');
-	var MongoClient = require('mongodb').MongoClient;
-	var url = "mongodb://localhost:27017/";
-	MongoClient.connect(url, function(err, db) {
-	    if (err) throw err;
-	    var dbase = db.db("eRecruitDB");
-	    dbase.createCollection("talent", function(err, res) {
-	        if (err) throw err;
-	        console.log("Collection created!");
-	        dbase.collection("talent").insertMany(jsonData, function (err, result) {
-	            if (err) throw err;
-	            console.log("1000 Recorded Inserted");
-	    });
+    var jsonData = require('../MOCK_DATA.json');
+    var MongoClient = require('mongodb').MongoClient;
+    var url = "mongodb://localhost:27017/";
+    MongoClient.connect(url, function(err, db) {
+        if (err) throw err;
+        var dbase = db.db("eRecruitDB");
+        dbase.createCollection("talent", function(err, res) {
+            if (err) throw err;
+            console.log("Collection created!");
+            dbase.collection("talent").insertMany(jsonData, function (err, result) {
+                if (err) throw err;
+                console.log("1000 Recorded Inserted");
+            });
 
-	});
-	});
+        });
+    });
 
-	res.send('Successfully inserted 1000 rows into database');
+    res.send('Successfully inserted 1000 rows into database');
 };
