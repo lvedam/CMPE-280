@@ -30,9 +30,10 @@ router.get('/home', cntrMain.home);
 router.get('/talent', modelMain.get_talent);
 router.get('/addTalent', cntrMain.new_talent);
 router.post('/addTalent', modelMain.add_talent);
-router.get('/talent/:fname', modelMain.get_searchtalent);
-router.get('/deleteTalent/:fname', cntrMain.get_deletetalent);
-router.post('/deleteTalent/:fname', modelMain.post_deletetalent);
+router.get('/deleteTalent/:lname', cntrMain.get_deletetalent);
+router.post('/deleteTalent/:lname', modelMain.post_deletetalent);
+router.get('/updateTalent/:lname', cntrMain.update_talent);
+router.post('/updateTalent/:lname', modelMain.post_update_talent);
 router.get('/addRecords', modelMain.get_addRecords);
 
 /*
